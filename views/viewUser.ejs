@@ -1,30 +1,36 @@
-<table class="table">
-  <a href="add"><button class="btn btn-primary">Thêm</button></a>
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Username</th>
-      <th scope="col">Fullname</th>
-      <th scope="col">Address</th>
-      <th scope="col">Setting</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% data.rows.forEach(function(user, index) { %>
-    <th scope="row"><%= index + 1 %></th>
-
-    <td><%= user.username %></td>
-
-    <td><%= user.fullname %></td>
-
-    <td><%= user.address %></td>
-
-    <td>
-      <button class="btn btn-primary">Sửa</button>
-      <button class="btn btn-danger">Xóa</button>
-      <button class="btn btn-info">Xem</button>
-    </td>
-
-    <% }); %>
-  </tbody>
-</table>
+<div class="container">
+  <table class="table">
+    <a href="add" class="float-end"
+      ><button class="btn btn-primary">Thêm</button></a
+    >
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Username</th>
+        <th scope="col">Fullname</th>
+        <th scope="col">Address</th>
+        <th scope="col">Setting</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% data.rows.forEach(function(user, index) { %>
+      <tr>
+        <th scope="row"><%= index + 1 %></th>
+        <td><%= user.username %></td>
+        <td><%= user.fullname %></td>
+        <td><%= user.address %></td>
+        <td>
+          <a href="/user/edit/<%= user.username %>" class="btn btn-warning"
+            >Sửa</a
+          >
+          <form action="/api/delete" method="post" class="d-inline-block">
+            <input type="hidden" name="username" value="<%= user.username %>" />
+            <button class="btn btn-danger" type="submit">Xóa</button>
+          </form>
+          <a href="/user/view/<%= user.username %>" class="btn btn-info">Xem</a>
+        </td>
+        <% }); %>
+      </tr>
+    </tbody>
+  </table>
+</div>

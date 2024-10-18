@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <h1 class="mb-4">User Details</h1>
+  <div class="card">
+    <div class="card-body">
+      <p class="card-title">
+        Username: <span id="username"><%= data.user.username %></span>
+      </p>
+      <p class="card-text">
+        Full Name: <span id="fullname"><%= data.user.fullname %></span>
+      </p>
+      <p class="card-text">
+        Address: <span id="address"><%= data.user.address %></span>
+      </p>
+      <p class="card-text">
+        Sex:
+        <span id="sex"><%= data.user.sex == 0 ? 'Nam' : 'Nữ' %> </span>
+      </p>
+      <p class="card-text">
+        Email: <span id="email"><%= data.user.email %></span>
+      </p>
+    </div>
+  </div>
+</div>

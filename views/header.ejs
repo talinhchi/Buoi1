@@ -19,5 +19,13 @@
     <li class="nav-item">
       <a href="/user/viewAll" class="nav-link">Xem danh sách</a>
     </li>
+    <li class="nav-item">
+      <% if (user) { %>
+      <p>Xin chào <%= user.fullname %></p>
+      <a href="/logout" class="nav-link">Đăng xuất</a>
+      <% } else { %>
+      <a href="/login" class="nav-link">Đăng nhập</a>
+      <% } %>
+    </li>
   </ul>
 </header>

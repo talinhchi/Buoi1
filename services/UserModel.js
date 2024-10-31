@@ -39,6 +39,7 @@ const editUser = async (data) => {
       data.usernameEdit,
     ]
   );
+  return row;
 };
 const deleteUser = async (username) => {
   const [row, fields] = await pool.execute(

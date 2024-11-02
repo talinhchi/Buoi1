@@ -6,7 +6,7 @@ import userController from "../controllers/UserController";
 import auth from "../middlewares/auth";
 
 const initWebRoutes = (app) => {
-  app.use(auth.isLogin);
+  app.use(auth.globalVariables);
   app.get("/login", userController.getLoginPage);
   app.get("/logout", userController.logout);
   app.get("/", getHomePage);
@@ -16,16 +16,19 @@ const initWebRoutes = (app) => {
   app.get("/user/add", userController.getAddUserPage);
   app.post("/api/addUser", userController.addUser);
   app.post("/api/login", userController.login);
-  // admin
+  // phân quyền
   app.get(
     "/user/view/:username",
-    auth.isAdmin,
+    auth.isMineOrAdmin,
     userController.getDetailUserPage
   );
-  app.post("/api/delete", auth.isAdmin, userController.deleteUser);
-  // user
-  app.get("/user/edit/:username", auth.isBoth, userController.getEditUserPage);
-  app.post("/api/editUser", auth.isBoth, userController.editUser);
+  app.post("/api/delete", auth.isMineOrAdmin, userController.deleteUser);
+  app.get(
+    "/user/edit/:username",
+    auth.isMineOrAdmin,
+    userController.getEditUserPage
+  );
+  app.post("/api/editUser", auth.isMineOrAdmin, userController.editUser);
 
   // api
   app.get("/api/getAllUser", userController.getAllUser);

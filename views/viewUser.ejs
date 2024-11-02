@@ -28,7 +28,11 @@
           <a href="/user/edit/<%= user.username %>" class="btn btn-warning"
             >Sửa</a
           >
-          <form action="/api/delete" method="post" class="d-inline-block">
+          <form
+            action="/api/delete/<%= user.username %>"
+            method="post"
+            class="d-inline-block"
+          >
             <input type="hidden" name="username" value="<%= user.username %>" />
             <button class="btn btn-danger" type="submit">Xóa</button>
           </form>

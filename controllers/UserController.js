@@ -64,6 +64,9 @@ const editUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const { username } = req.body;
   await userModel.deleteUser(username);
+  if (req.session.isAuth) {
+    req.session.destroy();
+  }
   res.redirect("/user/viewAll");
 };
 const login = async (req, res) => {

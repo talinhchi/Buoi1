@@ -22,7 +22,11 @@ const initWebRoutes = (app) => {
     auth.isMineOrAdmin,
     userController.getDetailUserPage
   );
-  app.post("/api/delete", auth.isMineOrAdmin, userController.deleteUser);
+  app.post(
+    "/api/delete/:username",
+    auth.isMineOrAdmin,
+    userController.deleteUser
+  );
   app.get(
     "/user/edit/:username",
     auth.isMineOrAdmin,

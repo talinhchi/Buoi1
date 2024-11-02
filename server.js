@@ -1,13 +1,28 @@
 import express from "express";
 import dotenv from "dotenv/config";
 import bodyParser from "body-parser";
-
+import redisStore from "connect-redis";
+import { createClient } from "redis";
 import viewEngine from "./viewEngine";
 import initWebRoutes from "./routes";
 import session from "express-session";
 const app = express();
+
+const redisClient = createClient({
+  password: "CzMRmSxudRmnZwrTZvpX8hHm4i2DU6Ts",
+  socket: {
+    host: "redis-10158.c282.east-us-mz.azure.redns.redis-cloud.com",
+    port: 10158,
+  },
+});
+redisClient.connect().catch(console.error);
+const redisStoreInstance = new redisStore({
+  client: redisClient,
+  prefix: "",
+});
 app.use(
   session({
+    store: redisStoreInstance,
     secret: "hehe ahhe hahehheehehhe",
     resave: false,
     saveUninitialized: true,

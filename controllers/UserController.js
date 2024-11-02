@@ -78,7 +78,7 @@ const login = async (req, res) => {
     res.redirect("/login");
     return;
   }
-  req.session.user = user[0];
+  req.session.userLogin = user[0];
   req.session.isAuth = true;
   req.session.role = user[0].role;
   res.redirect("/user/viewAll");

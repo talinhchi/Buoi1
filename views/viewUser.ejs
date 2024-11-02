@@ -9,7 +9,9 @@
         <th scope="col">Username</th>
         <th scope="col">Fullname</th>
         <th scope="col">Address</th>
+        <% if (userLogin) { %>
         <th scope="col">Setting</th>
+        <% } %>
       </tr>
     </thead>
     <tbody>
@@ -19,6 +21,9 @@
         <td><%= user.username %></td>
         <td><%= user.fullname %></td>
         <td><%= user.address %></td>
+
+        <% if (userLogin) { %> <% if (userLogin.username === user.username ||
+        userLogin.role === 0) { %>
         <td>
           <a href="/user/edit/<%= user.username %>" class="btn btn-warning"
             >Sửa</a
@@ -29,8 +34,9 @@
           </form>
           <a href="/user/view/<%= user.username %>" class="btn btn-info">Xem</a>
         </td>
-        <% }); %>
+        <% } %> <% } %>
       </tr>
+      <% }); %>
     </tbody>
   </table>
 </div>

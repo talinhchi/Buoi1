@@ -1,6 +1,6 @@
 <div class="container mt-5">
     <h2>Edit User</h2>
-    <form action="/api/editUser" method="POST">
+    <form action="/api/editUser/<%= data.user.username %>" method="POST">
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input

@@ -32,7 +32,11 @@ const initWebRoutes = (app) => {
     auth.isMineOrAdmin,
     userController.getEditUserPage
   );
-  app.post("/api/editUser", auth.isMineOrAdmin, userController.editUser);
+  app.post(
+    "/api/editUser/:username",
+    auth.isMineOrAdmin,
+    userController.editUser
+  );
 
   // api
   app.get("/api/getAllUser", userController.getAllUser);

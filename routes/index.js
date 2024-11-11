@@ -14,6 +14,8 @@ const initWebRoutes = (app) => {
   app.get("/contract", getContractPage);
   app.get("/user/viewAll", userController.getUserPage);
   app.get("/user/add", userController.getAddUserPage);
+  // sequelize
+  app.post("/api/addUserSequelize", userController.addUserSequelize);
   app.post("/api/addUser", userController.addUser);
   app.post("/api/login", userController.login);
   // phân quyền
@@ -21,6 +23,12 @@ const initWebRoutes = (app) => {
     "/user/view/:username",
     auth.isMineOrAdmin,
     userController.getDetailUserPage
+  );
+  // delete user viết bằng sequelize
+  app.post(
+    "/api/deleteSequelize/:username",
+    auth.isMineOrAdmin,
+    userController.deleteUserSequelize
   );
   app.post(
     "/api/delete/:username",

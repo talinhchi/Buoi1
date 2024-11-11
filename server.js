@@ -6,6 +6,8 @@ import { createClient } from "redis";
 import viewEngine from "./viewEngine";
 import initWebRoutes from "./routes";
 import session from "express-session";
+
+import sequelize from "./configs/sequelize";
 const app = express();
 
 const redisClient = createClient({
@@ -29,6 +31,9 @@ app.use(
     cookie: { secure: false },
   })
 );
+sequelize.sync({ force: false }).then(() => {
+  console.log("Database & tables created!");
+});
 viewEngine(app);
 app.use(bodyParser.urlencoded({ extended: true }));
 const port = process.env.PORT;

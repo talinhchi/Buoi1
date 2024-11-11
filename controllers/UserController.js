@@ -1,4 +1,5 @@
 import userModel from "../services/UserModel";
+import User from "../models/User";
 import { hashSync, compareSync } from "bcrypt";
 
 // danh sách các hàm controller xử lý view
@@ -56,6 +57,25 @@ const addUser = async (req, res) => {
   await userModel.addUser(data);
   res.redirect("/user/viewAll");
 };
+// addUser viết bằng sequelize
+const addUserSequelize = async (req, res) => {
+  const data = req.body;
+  const hashPassword = hashSync(data.password, 10);
+  try {
+    await User.create({
+      username: data.username,
+      password: hashPassword,
+      fullname: data.fullname,
+      address: data.address,
+      sex: data.sex,
+      email: data.email,
+    });
+    res.redirect("/user/viewAll");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const editUser = async (req, res) => {
   const data = req.body;
   await userModel.editUser(data);
@@ -64,7 +84,26 @@ const editUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const { username } = req.body;
   await userModel.deleteUser(username);
-  if (req.session.isAuth) {
+  if (
+    (req.session.isAuth && req.session.userLogin.role === 1) ||
+    req.session.userLogin.username === username
+  ) {
+    req.session.destroy();
+  }
+  res.redirect("/user/viewAll");
+};
+// delete user viết bằng sequelize
+const deleteUserSequelize = async (req, res) => {
+  const { username } = req.body;
+  await User.destroy({
+    where: {
+      username,
+    },
+  });
+  if (
+    (req.session.isAuth && req.session.userLogin.role === 1) ||
+    req.session.userLogin.username === username
+  ) {
     req.session.destroy();
   }
   res.redirect("/user/viewAll");
@@ -113,4 +152,7 @@ export default {
   logout,
   getAllUser,
   getUserByUsername,
+  // sequelize
+  addUserSequelize,
+  deleteUserSequelize,
 };

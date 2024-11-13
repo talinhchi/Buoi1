@@ -54,6 +54,12 @@ const getLoginPage = (req, res) => {
 // danh sách các hàm controller xử lý form
 const addUser = async (req, res) => {
   const data = req.body;
+  // kiểm tra trùng username
+  const user = await userModel.getUserByUsername(data.username);
+  if (user.length !== 0) {
+    res.redirect("/user/add");
+    return;
+  }
   await userModel.addUser(data);
   res.redirect("/user/viewAll");
 };
@@ -129,16 +135,7 @@ const logout = (req, res) => {
   req.session.destroy();
   res.redirect("/login");
 };
-// api
-const getAllUser = async (req, res) => {
-  const listUsers = await userModel.getAllUser();
-  res.json(listUsers);
-};
-const getUserByUsername = async (req, res) => {
-  const { username } = req.params;
-  const user = await userModel.getUserByUsername(username);
-  res.json(user);
-};
+
 export default {
   getUserPage,
   getAddUserPage,
@@ -150,8 +147,6 @@ export default {
   deleteUser,
   login,
   logout,
-  getAllUser,
-  getUserByUsername,
   // sequelize
   addUserSequelize,
   deleteUserSequelize,

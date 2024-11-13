@@ -2,6 +2,7 @@ import { getHomePage } from "../controllers/HomeController";
 import { getAboutPage } from "../controllers/AboutController";
 import { getContractPage } from "../controllers/ContractController";
 import userController from "../controllers/UserController";
+import apiController from "../controllers/ApiController";
 
 import auth from "../middlewares/auth";
 
@@ -46,8 +47,13 @@ const initWebRoutes = (app) => {
     userController.editUser
   );
 
-  // api
-  app.get("/api/getAllUser", userController.getAllUser);
-  app.get("/api/getUserByUsername/:username", userController.getUserByUsername);
+  //api
+  app.get("/api/v1/getListUser", apiController.getListUser);
+  app.get("/api/v1/getUserByUsername/:username", apiController.getDetailUser);
+  app.post("/api/v1/addUser", apiController.addUser);
+  app.post("/api/v1/deleteUser/:username", apiController.deleteUser);
+  app.post("/api/v1/editUser/:username", apiController.editUser);
+  app.post("/api/v1/login", apiController.login);
+  app.get("/api/v1/logout", apiController.logout);
 };
 export default initWebRoutes;

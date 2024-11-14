@@ -1,5 +1,8 @@
 import userModel from "../services/UserModel";
+import groupModel from "../services/GroupModel";
+import productModel from "../services/ProductModel";
 import { compareSync } from "bcrypt";
+import fs from "fs";
 
 const getListUser = async (req, res) => {
   const listUsers = await userModel.getAllUser();
@@ -81,6 +84,101 @@ const logout = (req, res) => {
     message: "Đăng xuất thành công",
   });
 };
+const getListGroup = async (req, res) => {
+  const listGroups = await groupModel.getAllGroup();
+  return res.status(200).json({
+    groups: listGroups,
+    error: false,
+    message: "Lấy danh sách nhóm thành công",
+  });
+};
+const getGroupById = async (req, res) => {
+  const { id } = req.params;
+  const group = await groupModel.getGroupById(id);
+  return res.status(200).json({
+    group: group[0],
+    error: false,
+    message: "Lấy thông tin nhóm thành công",
+  });
+};
+const addGroup = async (req, res) => {
+  const { name } = req.body;
+  await groupModel.addGroup(name);
+  return res.status(200).json({
+    error: false,
+    message: "Thêm nhóm thành công",
+  });
+};
+const editGroup = async (req, res) => {
+  const { idnhom, name } = req.body;
+  await groupModel.editGroup(idnhom, name);
+  return res.status(200).json({
+    error: false,
+    message: "Sửa thông tin nhóm thành công",
+  });
+};
+const deleteGroup = async (req, res) => {
+  const { idnhom } = req.params;
+  await groupModel.deleteGroup(idnhom);
+  return res.status(200).json({
+    error: false,
+    message: "Xóa nhóm thành công",
+  });
+};
+const getListProduct = async (req, res) => {
+  const listProducts = await productModel.getAllProduct();
+  return res.status(200).json({
+    products: listProducts,
+    error: false,
+    message: "Lấy danh sách sản phẩm thành công",
+  });
+};
+const getDetailProduct = async (req, res) => {
+  const { masp } = req.params;
+  const product = await productModel.getDetailProduct(masp);
+  return res.status(200).json({
+    product: product[0],
+    error: false,
+    message: "Lấy thông tin sản phẩm thành công",
+  });
+};
+const addProduct = async (req, res) => {
+  const data = req.body;
+  const nameImg = req.file.filename;
+  data.hinhanh = nameImg;
+  await productModel.addProduct(data);
+  return res.status(200).json({
+    error: false,
+    message: "Thêm sản phẩm thành công",
+  });
+};
+const editProduct = async (req, res) => {
+  const data = req.body;
+  if (req.file) {
+    if (fs.existsSync(`public/images/${data.hinhanh}`)) {
+      fs.unlinkSync(`public/images/${data.hinhanh}`);
+    }
+    const nameImg = req.file.filename;
+    data.hinhanh = nameImg;
+  }
+  await productModel.editProduct(data);
+  return res.status(200).json({
+    error: false,
+    message: "Sửa thông tin sản phẩm thành công",
+  });
+};
+const deleteProduct = async (req, res) => {
+  const { masp } = req.params;
+  const product = await productModel.getDetailProduct(masp);
+  if (fs.existsSync(`public/images/${product[0].hinhanh}`)) {
+    fs.unlinkSync(`public/images/${product[0].hinhanh}`);
+  }
+  await productModel.deleteProduct(masp);
+  return res.status(200).json({
+    error: false,
+    message: "Xóa sản phẩm thành công",
+  });
+};
 export default {
   getListUser,
   getDetailUser,
@@ -89,4 +187,14 @@ export default {
   editUser,
   login,
   logout,
+  getListGroup,
+  getGroupById,
+  addGroup,
+  editGroup,
+  deleteGroup,
+  getListProduct,
+  getDetailProduct,
+  addProduct,
+  editProduct,
+  deleteProduct,
 };

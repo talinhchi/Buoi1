@@ -6,10 +6,11 @@ import { createClient } from "redis";
 import viewEngine from "./viewEngine";
 import initWebRoutes from "./routes";
 import session from "express-session";
+import cors from "cors";
 
 import sequelize from "./configs/sequelize";
 const app = express();
-
+app.use(cors());
 const redisClient = createClient({
   password: "CzMRmSxudRmnZwrTZvpX8hHm4i2DU6Ts",
   socket: {
@@ -36,6 +37,7 @@ sequelize.sync({ force: false }).then(() => {
 });
 viewEngine(app);
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 const port = process.env.PORT;
 initWebRoutes(app);
 app.listen(port, () => {

@@ -5,6 +5,7 @@ import userController from "../controllers/UserController";
 import apiController from "../controllers/ApiController";
 
 import auth from "../middlewares/auth";
+import upload from "../configs/multer";
 
 const initWebRoutes = (app) => {
   app.use(auth.globalVariables);
@@ -55,5 +56,25 @@ const initWebRoutes = (app) => {
   app.post("/api/v1/editUser/:username", apiController.editUser);
   app.post("/api/v1/login", apiController.login);
   app.get("/api/v1/logout", apiController.logout);
+  // api của buổi 2 react
+  app.get("/api/v1/getListGroup", apiController.getListGroup);
+  app.get("/api/v1/getGroupById/:id", apiController.getGroupById);
+  app.post("/api/v1/addGroup", apiController.addGroup);
+  app.post("/api/v1/editGroup", apiController.editGroup);
+  app.post("/api/v1/deleteGroup/:idnhom", apiController.deleteGroup);
+
+  app.get("/api/v1/getListProduct", apiController.getListProduct);
+  app.get("/api/v1/getDetailProduct/:masp", apiController.getDetailProduct);
+  app.post(
+    "/api/v1/addProduct",
+    upload.single("inpImage"),
+    apiController.addProduct
+  );
+  app.post(
+    "/api/v1/editProduct",
+    upload.single("inpImage"),
+    apiController.editProduct
+  );
+  app.post("/api/v1/deleteProduct/:masp", apiController.deleteProduct);
 };
 export default initWebRoutes;

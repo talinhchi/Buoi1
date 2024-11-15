@@ -11,6 +11,7 @@ import cors from "cors";
 import sequelize from "./configs/sequelize";
 const app = express();
 app.use(cors());
+app.use(express.static("public"));
 const redisClient = createClient({
   password: "CzMRmSxudRmnZwrTZvpX8hHm4i2DU6Ts",
   socket: {

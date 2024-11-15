@@ -9,7 +9,7 @@ const getAllProduct = async () => {
 
 const getDetailProduct = async (masp) => {
   const [row, fields] = await pool.execute(
-    "SELECT * FROM `sanpham` WHERE `masp` = ?",
+    "SELECT sanpham.*, nhom.ten as tenNhom FROM `sanpham` join nhom on sanpham.idnhom = nhom.idnhom WHERE `masp` = ?",
     [masp]
   );
   return row;

@@ -3,6 +3,8 @@ import groupModel from "../services/GroupModel";
 import productModel from "../services/ProductModel";
 import { compareSync } from "bcrypt";
 import fs from "fs";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv/config";
 
 const getListUser = async (req, res) => {
   const listUsers = await userModel.getAllUser();
@@ -54,9 +56,9 @@ const editUser = async (req, res) => {
     message: "Sửa thông tin người dùng thành công",
   });
 };
-const login = (req, res) => {
+const login = async (req, res) => {
   const { username, password } = req.body;
-  const user = userModel.getUserByUsername(username);
+  const user = await userModel.getUserByUsername(username);
   if (user.length === 0) {
     return res.status(200).json({
       error: true,
@@ -69,12 +71,31 @@ const login = (req, res) => {
       message: "Thông tin đăng nhập không đúng",
     });
   }
-  req.session.user = user[0];
-  req.session.isAuth = true;
-  req.session.role = user[0].role;
+  const infoUser = {
+    username: user[0].username,
+    role: user[0].role,
+    fullname: user[0].fullname,
+    email: user[0].email,
+    address: user[0].address,
+    sex: user[0].sex,
+  };
+  const accessToken = jwt.sign(infoUser, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1h",
+  });
+
   return res.status(200).json({
     error: false,
     message: "Đăng nhập thành công",
+    accessToken,
+    user: infoUser,
+  });
+};
+const getInfoUserJWT = async (req, res) => {
+  const { user } = req;
+  return res.status(200).json({
+    error: false,
+    message: "Lấy thông tin người dùng thành công",
+    user,
   });
 };
 const logout = (req, res) => {
@@ -186,6 +207,7 @@ export default {
   deleteUser,
   editUser,
   login,
+  getInfoUserJWT,
   logout,
   getListGroup,
   getGroupById,

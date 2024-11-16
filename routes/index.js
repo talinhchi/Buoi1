@@ -76,5 +76,10 @@ const initWebRoutes = (app) => {
     apiController.editProduct
   );
   app.post("/api/v1/deleteProduct/:masp", apiController.deleteProduct);
+  app.get(
+    "/api/v1/getInfoUserJWT",
+    auth.verifyToken,
+    apiController.getInfoUserJWT
+  );
 };
 export default initWebRoutes;

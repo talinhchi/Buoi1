@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+
 const globalVariables = (req, res, next) => {
   res.locals.userLogin = null;
   if (req.session.isAuth) {
@@ -18,8 +20,27 @@ const isMineOrAdmin = (req, res, next) => {
   }
   res.redirect("/");
 };
+const verifyToken = (req, res, next) => {
+  const token = req.headers["authorization"];
+  if (!token) {
+    return res.status(403).json({ error: true, message: "Access Denied" });
+  }
+
+  jwt.verify(
+    token.split(" ")[1],
+    process.env.ACCESS_TOKEN_SECRET,
+    (err, user) => {
+      if (err) {
+        return res.status(403).json({ error: true, message: "Access Denied" });
+      }
+      req.user = user;
+      next();
+    }
+  );
+};
 
 export default {
   globalVariables,
   isMineOrAdmin,
+  verifyToken,
 };
